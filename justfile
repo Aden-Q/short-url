@@ -6,7 +6,6 @@
 @vendor:
   go mod vendor
 
-
 # run all tests with ginkgo
 @test:
   ginkgo run -r
