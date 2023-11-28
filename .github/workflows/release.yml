@@ -1,4 +1,4 @@
-name: Auomatic version bump and changelog with cocogitto
+name: Auomatic version bump and changelog
 
 on:
     # Runs on pushes targeting the default branch
