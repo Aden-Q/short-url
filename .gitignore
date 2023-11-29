@@ -14,11 +14,14 @@
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
+# migration directory
+db/
+
 # Dependency directories (remove the comment below to include it)
 vendor/
 
 # Go workspace file
 go.work
 
-# ignore the built binary
-go-web-app-template
+# ignore the executable
+short-url

@@ -3,12 +3,9 @@ Copyright © 2023 Zecheng Qian
 */
 package main
 
-import "github.com/gin-gonic/gin"
+import "github.com/Aden-Q/short-url/internal/pkg/router"
 
 func main() {
-	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{"message": "pong"})
-	})
-	r.Run()
+	r := router.NewRouter()
+	r.Run("localhost:8080")
 }
