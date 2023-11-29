@@ -1,4 +1,4 @@
-package redis_test
+package base62_test
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestRedis(t *testing.T) {
+func TestBase62(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "Redis Suite")
+	RunSpecs(t, "Base62 Suite")
 }

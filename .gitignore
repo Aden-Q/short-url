@@ -20,5 +20,5 @@ vendor/
 # Go workspace file
 go.work
 
-# ignore the built binary
-go-web-app-template
+# ignore the executable
+short-url

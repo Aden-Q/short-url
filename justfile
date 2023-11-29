@@ -9,3 +9,7 @@
 # run all tests with ginkgo
 @test:
   ginkgo run -r
+
+# build a binary executable for the project
+@build:
+  go build -o short-url

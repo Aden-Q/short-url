@@ -35,11 +35,11 @@ func NewRouter() *Router {
 	{
 		// The POST endpoint for shortening a long URL
 		// We bind the request string because we don't want to cache the request
-		apiv1.POST("/data/shorten", GetLongURL)
+		apiv1.POST("/data/shorten", GetLongURLHandler)
 
 		// The GET endpoint for redirecting a short URL to a long URL, returns the long URL
 		// We use URI binding because we want to cache the request
-		apiv1.GET("/:shortURL", GetShortURL)
+		apiv1.GET("/:shortURL", GetShortURLHandler)
 	}
 
 	return &r
@@ -47,7 +47,7 @@ func NewRouter() *Router {
 
 // define handler functions here
 
-func GetLongURL(c *gin.Context) {
+func GetLongURLHandler(c *gin.Context) {
 	var longURL LongURL
 	if err := c.ShouldBindQuery(&longURL); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -56,7 +56,7 @@ func GetLongURL(c *gin.Context) {
 	}
 }
 
-func GetShortURL(c *gin.Context) {
+func GetShortURLHandler(c *gin.Context) {
 	var shortURL ShortURL
 	if err := c.ShouldBindUri(&shortURL); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

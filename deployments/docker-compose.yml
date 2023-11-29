@@ -1,1 +1,56 @@
 version: '3.8'
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - 3306:3306
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 1m30s
+      timeout: 20s
+      retries: 5
+      start_period: 10s
+    volumes:
+      - mysql_data:/var/lib/mysql
+  
+  redis:
+    image: redis:7.2
+    container_name: redis
+    restart: always
+    ports:
+      - 6379:6379
+    healthcheck:
+      test: ["CMD", "redis-cli" ,"ping"]
+      interval: 1m30s
+      timeout: 20s
+      retries: 5
+      start_period: 10s
+    volumes:
+      - redis_data:/var/data/redis
+
+  short-url:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: short-url
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+volumes:
+  mysql_data:
+    external: false
+  redis_data:
+    external: false

@@ -23,6 +23,29 @@ The current components include:
 
 + Return: longURL for HTTP redirection
 
+## Build and Run Locally
+
+We use docker-compose.
+
+First use docker-compose up to start a web server, a mysql server, and a redis server by running:
+
+```bash
+$ docker-compose up -d
+```
+
+To connect to the mysql server, run:
+
+```bash
+mysql -h 127.0.0.1 -P 3306 -u root -p db
+```
+
+To connect to the redis server, run:
+
+```
+redis-cli
+```
+
+
 ## License
 
 [MIT License](./LICENSE)
