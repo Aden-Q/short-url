@@ -1,4 +1,4 @@
-package middleware_test
+package redis_test
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestMiddleware(t *testing.T) {
+func TestRedis(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "Middleware Suite")
+	RunSpecs(t, "Redis Suite")
 }
