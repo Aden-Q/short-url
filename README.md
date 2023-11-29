@@ -3,6 +3,8 @@ This is a template to bootstrap building Web applications in Go. It is kept smal
 
 We use the command runner [just](https://github.com/casey/just) as a makefile alternative.
 
+We use `direnv` and .envrc so that we can create new migrations with less pain.
+
 The current components include:
 + A bare bone Web app 
 + Version bump and autotag for release

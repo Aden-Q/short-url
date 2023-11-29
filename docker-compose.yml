@@ -1,5 +1,18 @@
 version: '3.8'
+
 services:
+  short-url:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: short-url
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql
+      - redis
+
   mysql:
     image: mysql:8.0
     container_name: mysql
@@ -16,7 +29,7 @@ services:
       interval: 1m30s
       timeout: 20s
       retries: 5
-      start_period: 10s
+      start_period: 5s
     volumes:
       - mysql_data:/var/lib/mysql
   
@@ -31,23 +44,24 @@ services:
       interval: 1m30s
       timeout: 20s
       retries: 5
-      start_period: 10s
+      start_period: 5s
     volumes:
       - redis_data:/var/data/redis
 
-  short-url:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: short-url
-    restart: always
-    ports:
-      - 8080:8080
+  # only run migration once
+  dbmate:
+    image: amacneil/dbmate:2.8.0
+    container_name: dbmate
+    restart: no
+    environment:
+      DBMATE_MIGRATIONS_DIR: /db/migrations
+      DBMATE_SCHEMA_FILE: /db/schema.sql
+      DATABASE_URL: mysql://user:password@mysql:3306/db
     depends_on:
-      mysql:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+      - mysql
+    volumes:
+      - ./assets/db/migrations:/db/migrations
+    command: ["--wait", "up"]
 
 volumes:
   mysql_data:
