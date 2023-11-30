@@ -30,5 +30,7 @@ func main() {
 		},
 	)
 
-	r.Run(configs.ServerAddr)
+	if err := r.Run(configs.ServerAddr); err != nil {
+		panic(err)
+	}
 }
