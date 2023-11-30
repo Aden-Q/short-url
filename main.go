@@ -17,6 +17,7 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
+	// Connect to database
 	db, err := db.NewEngine(db.Config{
 		MySQLDSN: configs.MySQLDSN,
 	})
@@ -24,11 +25,13 @@ func main() {
 		panic(err)
 	}
 
+	// Create router
 	r := router.NewRouter(
 		router.Config{
 			DB: db,
 		},
 	)
 
+	// Launch server
 	r.Run(configs.ServerAddr)
 }
