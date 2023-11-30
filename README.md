@@ -9,6 +9,7 @@ The current components include:
 + [TODO] Redis cache server
 + [TODO] a rate limiter middleware
 + [TODO] logging
++ [TODO] trace
 
 ## Usages
 
