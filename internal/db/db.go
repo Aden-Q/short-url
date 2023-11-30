@@ -24,5 +24,8 @@ func NewDBEngine() (*DBEngine, error) {
 	// run an initial migration
 	db.AutoMigrate(&model.URL{})
 
+	// set an initial value for the auto increment key
+	db.Exec("ALTER TABLE urls AUTO_INCREMENT = 100000")
+
 	return &DBEngine{db}, err
 }
