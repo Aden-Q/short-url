@@ -19,18 +19,24 @@ jobs:
         fetch-depth: '0'
 
     - name: Bump version and push tag
-      id: release
+      id: tag
       uses: anothrNick/github-tag-action@1.64.0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         WITH_V: true
 
+    - name: Generate release changelog
+      uses: heinrichreimer/action-github-changelog-generator@v2.3
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Create github release
       if: ${{ success() }}
       run: |
         gh release create \
-          ${{ steps.release.outputs.new_tag }} \
-          --title ${{ steps.release.outputs.new_tag }} \
+          ${{ steps.tag.outputs.new_tag }} \
+          --title ${{ steps.tag.outputs.new_tag }} \
+          --notes-file CHANGELOG.md \
           --target main
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
