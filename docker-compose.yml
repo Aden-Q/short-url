@@ -7,11 +7,15 @@ services:
       dockerfile: Dockerfile
     container_name: short-url
     restart: always
+    environment:
+      MYSQL_DSN: user:password@tcp(mysql:3306)/db
     ports:
       - 8080:8080
     depends_on:
-      - mysql
-      - redis
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
   mysql:
     image: mysql:8.0
@@ -25,9 +29,9 @@ services:
     ports:
       - 3306:3306
     healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      interval: 1m30s
-      timeout: 20s
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-ppassword"]
+      interval: 1s
+      timeout: 15s
       retries: 5
       start_period: 5s
     volumes:
@@ -41,8 +45,8 @@ services:
       - 6379:6379
     healthcheck:
       test: ["CMD", "redis-cli" ,"ping"]
-      interval: 1m30s
-      timeout: 20s
+      interval: 1s
+      timeout: 15s
       retries: 5
       start_period: 5s
     volumes:
@@ -58,7 +62,8 @@ services:
       DBMATE_SCHEMA_FILE: /db/schema.sql
       DATABASE_URL: mysql://user:password@mysql:3306/db
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     volumes:
       - ./assets/db/migrations:/db/migrations
     command: ["--wait", "up"]

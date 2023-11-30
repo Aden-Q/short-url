@@ -1,5 +1,5 @@
-# Go Web App Template
-This is a template to bootstrap building Web applications in Go. It is kept small and bare for better extensibility.
+# Short URL
+A fully functional URL shortener using MySQL as the storage server and Redis as the cache server. Also, there is rate limiting in place.
 
 We use the command runner [just](https://github.com/casey/just) as a makefile alternative.
 

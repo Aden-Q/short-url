@@ -1,8 +1,13 @@
 package model
 
+import (
+	"time"
+)
+
 // URL is the model for the Url table
 type URL struct {
-	ID       uint32 `json:"id"`
-	ShortURL string `json:"short_url"`
-	LongURL  string `json:"long_url"`
+	ID        uint32 `gorm:"primary_key"`
+	CreatedAt time.Time
+	ShortURL  string `gorm:"index"`
+	LongURL   string
 }
