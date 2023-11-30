@@ -3,6 +3,7 @@ package db
 import (
 	"os"
 
+	"github.com/Aden-Q/short-url/internal/model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -19,6 +20,9 @@ func NewDBEngine() (*DBEngine, error) {
 		mysql.Open(dns),
 		&gorm.Config{},
 	)
+
+	// run an initial migration
+	db.AutoMigrate(&model.URL{})
 
 	return &DBEngine{db}, err
 }

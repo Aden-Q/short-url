@@ -7,7 +7,6 @@ import (
 	"log"
 
 	"github.com/Aden-Q/short-url/internal/db"
-	"github.com/Aden-Q/short-url/internal/model"
 	"github.com/Aden-Q/short-url/internal/router"
 	"github.com/Aden-Q/short-url/internal/settings"
 )
@@ -22,8 +21,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-
-	db.AutoMigrate(&model.URL{})
 
 	r := router.NewRouter(
 		router.RouterConfig{
