@@ -1,46 +1,37 @@
-name: Auomatic version bump and changelog
-
+name: Bump version
 on:
-    # Runs on pushes targeting the default branch
-    push:
-      branches: ["main"]
-  
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+
 jobs:
-    cog_auto_release:
-      continue-on-error: true
-      runs-on: ubuntu-latest
-      name: create a github release
-      permissions:
-        contents: write
-      steps:
-        - uses: actions/checkout@v4
-          with:
-            fetch-depth: 0
-  
-        - name: Semantic versioning release
-          uses: cocogitto/cocogitto-action@v3
-          id: release
-          with:
-            release: true
-            git-user: 'cocogitto[bot]'
-            git-user-email: 'mycoolproject@org.org'
-            check-latest-tag-only: true
-  
-        - name: Generate a changelog for release
-          if: ${{ success() }}
-          run: cog changelog --at ${{ steps.release.outputs.version }} > RELEASE_CHANGELOG.md
-  
-        - name: Create github release
-          if: ${{ success() }}
-          run: |
-            gh release create \
-              ${{ steps.release.outputs.version }} \
-              --title ${{ steps.release.outputs.version }} \
-              --notes-file RELEASE_CHANGELOG.md \
-              --target main
-          env:
-            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  
-        - name: no bump
-          if: ${{ failure() }}
-          run: echo "Skipped as no detected version bump"
+  build:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        ref: ${{ github.event.pull_request.merge_commit_sha }}
+        fetch-depth: '0'
+
+    - name: Bump version and push tag
+      id: release
+      uses: anothrNick/github-tag-action@1.64.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        WITH_V: true
+        PRERELEASE: true
+
+    - name: Create github release
+      if: ${{ success() }}
+      run: |
+        gh release create \
+          ${{ steps.release.outputs.new_tag }} \
+          --title ${{ steps.release.outputs.new_tag }} \
+          --target main
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
