@@ -8,7 +8,6 @@ The current components include:
 + [TODO] connection pooling
 + [TODO] Redis cache server
 + [TODO] a rate limiter middleware
-+ [TODO] logging
 
 ## Usages
 
