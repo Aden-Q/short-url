@@ -6,6 +6,10 @@
 @vendor:
   go mod vendor
 
+# run go mod tidy to update dependencies for go modules
+@tidy:
+  go mod tidy
+
 # run all tests with ginkgo
 @test:
   ginkgo run -r

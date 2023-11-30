@@ -6,10 +6,9 @@ package main
 import (
 	"log"
 
-	"github.com/Aden-Q/short-url/internal/pkg/db"
-	"github.com/Aden-Q/short-url/internal/pkg/model"
-	"github.com/Aden-Q/short-url/internal/pkg/router"
-	"github.com/Aden-Q/short-url/internal/pkg/settings"
+	"github.com/Aden-Q/short-url/internal/db"
+	"github.com/Aden-Q/short-url/internal/router"
+	"github.com/Aden-Q/short-url/internal/settings"
 )
 
 func main() {
@@ -23,8 +22,10 @@ func main() {
 		panic(err)
 	}
 
-	db.AutoMigrate(&model.URL{})
-
-	r := router.NewRouter()
+	r := router.NewRouter(
+		router.RouterConfig{
+			DB: db,
+		},
+	)
 	r.Run(appConfigs.ServerAddr)
 }
