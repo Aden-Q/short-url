@@ -16,4 +16,4 @@
 
 # a shortcut to connect to the mysql database
 @mysql:
-  mysql -h 127.0.0.1 -P 3306 -u root -p db
+  mysql -h 127.0.0.1 -P 3306 -u root -ppassword db

@@ -52,6 +52,7 @@ func GetLongURLHandler(c *gin.Context) {
 	if err := c.ShouldBindQuery(&longURL); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	} else {
+		// Write the URL to the database
 		c.JSON(200, gin.H{"longURL": longURL.LongURL})
 	}
 }

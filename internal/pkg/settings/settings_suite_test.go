@@ -1,4 +1,4 @@
-package base62_test
+package settings_test
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestBase62(t *testing.T) {
+func TestSettings(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "Base62 Suite")
+	RunSpecs(t, "Settings Suite")
 }
