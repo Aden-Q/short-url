@@ -23,9 +23,15 @@ func NewEngine(config Config) (*Engine, error) {
 		mysql.Open(config.MySQLDSN),
 		&config.Config,
 	)
+	if err != nil {
+		return nil, err
+	}
 
 	// run an initial migration
-	db.AutoMigrate(&model.URL{})
+	if err = db.AutoMigrate(&model.URL{}); err != nil {
+		// TODO: add a log
+		return nil, err
+	}
 
 	// set an initial value for the auto increment key
 	db.Exec("ALTER TABLE urls AUTO_INCREMENT = 100000")

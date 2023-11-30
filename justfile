@@ -25,3 +25,7 @@
 # a shortcut to connect to the redis database
 @redis:
   redis-cli
+
+# run lint
+@lint:
+  golangci-lint run
