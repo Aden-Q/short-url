@@ -30,4 +30,4 @@ jobs:
     - name: Test
       run: |
         go install github.com/onsi/ginkgo/v2/ginkgo
-        ginkgo run -r
+        ginkgo run -r -cover

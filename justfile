@@ -12,7 +12,7 @@
 
 # run all tests with ginkgo
 @test:
-  ginkgo run -r
+  ginkgo run -r -cover -coverprofile=coverage.out
 
 # build a binary executable for the project
 @build:
@@ -21,3 +21,7 @@
 # a shortcut to connect to the mysql database
 @mysql:
   mysql -h 127.0.0.1 -P 3306 -u root -ppassword db
+
+# a shortcut to connect to the redis database
+@redis:
+  redis-cli

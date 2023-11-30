@@ -8,7 +8,7 @@ services:
     container_name: short-url
     restart: always
     environment:
-      MYSQL_DSN: user:password@tcp(mysql:3306)/db
+      MYSQL_DSN: user:password@tcp(mysql:3306)/db?charset=utf8mb4&parseTime=True&loc=Local
     ports:
       - 8080:8080
     depends_on:
