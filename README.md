@@ -64,7 +64,7 @@ $ just mysql
 To connect to the redis server, run:
 
 ```bash
-$ just mysql
+$ just redis
 ```
 
 ## License
