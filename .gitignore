@@ -22,3 +22,6 @@ go.work
 
 # ignore the executable
 short-url
+
+# test coverage output
+coverage.out

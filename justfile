@@ -12,7 +12,7 @@
 
 # run all tests with ginkgo
 @test:
-  ginkgo run -r
+  ginkgo run -r -cover -coverprofile=coverage.out
 
 # build a binary executable for the project
 @build:
