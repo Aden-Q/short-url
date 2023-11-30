@@ -25,13 +25,13 @@ func main() {
 		panic(err)
 	}
 
-	// Create router
+	// Create a router
 	r := router.NewRouter(
 		router.Config{
 			DB: db,
 		},
 	)
 
-	// Launch server
+	// Launch the server
 	r.Run(configs.ServerAddr)
 }
