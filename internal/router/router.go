@@ -6,24 +6,24 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type RouterConfig struct {
-	DB *db.DBEngine
+type Config struct {
+	DB *db.Engine
 }
 
 type Router struct {
 	*gin.Engine
-	config RouterConfig
+	config Config
 }
 
 // a middleware for database connection
-func DBMiddleware(db *db.DBEngine) gin.HandlerFunc {
+func DBMiddleware(db *db.Engine) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Set("dbConn", db)
 		c.Next()
 	}
 }
 
-func NewRouter(config RouterConfig) *Router {
+func NewRouter(config Config) *Router {
 	// default gin engine with Logger and Recovery middleware
 	r := Router{
 		Engine: gin.Default(),

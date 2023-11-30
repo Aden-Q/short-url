@@ -19,7 +19,7 @@ type bindingQuery struct {
 
 // ShortenHandler shortens a long URL
 func ShortenHandler(c *gin.Context) {
-	db, ok := c.MustGet("dbConn").(*db.DBEngine)
+	db, ok := c.MustGet("dbConn").(*db.Engine)
 	if !ok {
 		c.JSON(500, gin.H{"message": "dbConn not found"})
 		return

@@ -15,7 +15,7 @@ type bindingURI struct {
 
 // ShortenHandlerFunc shortens a long URL
 func RedirectHandler(c *gin.Context) {
-	_, ok := c.MustGet("dbConn").(*db.DBEngine)
+	_, ok := c.MustGet("dbConn").(*db.Engine)
 	if !ok {
 		c.JSON(500, gin.H{"message": "dbConn not found"})
 		return

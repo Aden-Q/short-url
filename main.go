@@ -12,20 +12,23 @@ import (
 )
 
 func main() {
-	appConfigs, err := settings.Load()
+	configs, err := settings.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
 
-	db, err := db.NewDBEngine()
+	db, err := db.NewEngine(db.Config{
+		MySQLDSN: configs.MySQLDSN,
+	})
 	if err != nil {
 		panic(err)
 	}
 
 	r := router.NewRouter(
-		router.RouterConfig{
+		router.Config{
 			DB: db,
 		},
 	)
-	r.Run(appConfigs.ServerAddr)
+
+	r.Run(configs.ServerAddr)
 }
