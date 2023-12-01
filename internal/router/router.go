@@ -3,11 +3,13 @@ package router
 import (
 	"github.com/Aden-Q/short-url/internal/db"
 	"github.com/Aden-Q/short-url/internal/handler"
+	"github.com/Aden-Q/short-url/internal/redis"
 	"github.com/gin-gonic/gin"
 )
 
 type Config struct {
-	DB *db.Engine
+	DB    db.Engine
+	Redis redis.Client
 }
 
 type Router struct {
@@ -15,10 +17,18 @@ type Router struct {
 	config Config
 }
 
-// a middleware for database connection
-func DBMiddleware(db *db.Engine) gin.HandlerFunc {
+// DBMiddleware is a middleware to establish mysql database connection
+func DBMiddleware(db db.Engine) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Set("dbConn", db)
+		c.Next()
+	}
+}
+
+// RedisMiddleware is a middleware to establish redis connection
+func RedisMiddleware(redis redis.Client) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Set("redisConn", redis)
 		c.Next()
 	}
 }
@@ -30,8 +40,11 @@ func NewRouter(config Config) *Router {
 		config: config,
 	}
 
-	// attach a global middleware to enforce database connection
+	// attach a global middleware in the handler chain to enforce database connection
 	r.Use(DBMiddleware(config.DB))
+
+	// attach a global middleware in the handler chain to enforce redis connection
+	r.Use(RedisMiddleware(config.Redis))
 
 	// the health check endpoint
 	r.GET("/ping", handler.Health)

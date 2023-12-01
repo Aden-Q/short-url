@@ -6,8 +6,8 @@ import (
 
 	"github.com/Aden-Q/short-url/internal/db"
 	"github.com/Aden-Q/short-url/internal/model"
+	"github.com/Aden-Q/short-url/internal/redis"
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 // Used for URI binding
@@ -17,9 +17,17 @@ type bindingURI struct {
 
 // ShortenHandlerFunc shortens a long URL
 func RedirectHandler(c *gin.Context) {
-	db, ok := c.MustGet("dbConn").(*db.Engine)
+	// make sure mysql connection is established is is stored into the context
+	d, ok := c.MustGet("dbConn").(db.Engine)
 	if !ok {
 		c.JSON(500, gin.H{"message": "dbConn not found"})
+		return
+	}
+
+	// make sure redis connection is established is is stored into the context
+	_, ok = c.MustGet("redisConn").(redis.Client)
+	if !ok {
+		c.JSON(500, gin.H{"message": "redis connection not established"})
 		return
 	}
 
@@ -32,10 +40,10 @@ func RedirectHandler(c *gin.Context) {
 		// if there's a record in the database, redirect to the long URL
 		// otherwise return 404
 		var url model.URL
-		if err := db.First(&url, "short_url = ?", binding.ShortURL).Error; err == nil {
+		if err := d.First(&url, "short_url = ?", binding.ShortURL); err == nil {
 			c.Redirect(http.StatusMovedPermanently, url.LongURL)
 			return
-		} else if errors.Is(err, gorm.ErrRecordNotFound) {
+		} else if errors.Is(err, db.ErrRecordNotFound) {
 			c.JSON(http.StatusNotFound, gin.H{"message": "URL not found"})
 			return
 		} else {
