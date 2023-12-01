@@ -47,6 +47,7 @@ func main() {
 		},
 	)
 
+	// Run is a blocking method, it only retuns when the server is shut down
 	if err := r.Run(configs.ServerAddr); err != nil {
 		panic(err)
 	}

@@ -14,11 +14,13 @@ type Config struct {
 // Client is the interface for redis client
 type Client interface {
 	// Get runs the redis GET command
-	Get(ctx context.Context, key string) (string, error)
+	Get(key string) (string, error)
 }
 
 // client is the redis client struct that implements the Client interface
 type client struct {
+	// ctx is required to make redis calls, if ctx is canceled, redis calls will not succeed
+	ctx    context.Context
 	config Config
 	*redis.Client
 }
@@ -26,6 +28,7 @@ type client struct {
 // NewClient creates a new redis client
 func NewClient(ctx context.Context, config Config) (Client, error) {
 	r := &client{
+		ctx:    ctx,
 		config: config,
 		Client: redis.NewClient(&redis.Options{
 			Addr: config.Addr,
@@ -39,6 +42,6 @@ func NewClient(ctx context.Context, config Config) (Client, error) {
 	return r, nil
 }
 
-func (r *client) Get(ctx context.Context, key string) (string, error) {
-	return r.Client.Get(ctx, key).Result()
+func (r *client) Get(key string) (string, error) {
+	return r.Client.Get(r.ctx, key).Result()
 }
