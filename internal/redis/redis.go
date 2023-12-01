@@ -14,6 +14,10 @@ type Config struct {
 
 // Client is the interface for redis client
 type Client interface {
+	// GetContext returns the context attached to the redis client instance
+	Context() context.Context
+	// GetClient returns the redis client instance
+	GetClient() *redis.Client
 	// Get runs the redis GET command
 	Get(key string) (string, error)
 	// Set runs the redis SET command, to set an expiration, use the SetEX command
@@ -47,6 +51,15 @@ func NewClient(ctx context.Context, config Config) (Client, error) {
 	}
 
 	return r, nil
+}
+
+// Context returns the context attached to the redis client instance
+func (r *client) Context() context.Context {
+	return r.ctx
+}
+
+func (r *client) GetClient() *redis.Client {
+	return r.Client
 }
 
 // Get runs the redis GET command

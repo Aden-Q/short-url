@@ -13,10 +13,16 @@ type URL struct {
 	LongURL   string `gorm:"index"`
 }
 
-var URLMatchRegex *regexp.Regexp
+var (
+	// short URL should be a legal base62 string
+	shortURLMatchRegex *regexp.Regexp
+	// long URL should be a legal http/https url
+	longURLMatchRegex *regexp.Regexp
+)
 
 func init() {
-	URLMatchRegex = regexp.MustCompile(`(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z0-9]{2,}(\.[a-zA-Z0-9]{2,})(\.[a-zA-Z0-9]{2,})?`)
+	shortURLMatchRegex = regexp.MustCompile(`^[A-Za-z0-9]+$`)
+	longURLMatchRegex = regexp.MustCompile(`(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z0-9]{2,}(\.[a-zA-Z0-9]{2,})(\.[a-zA-Z0-9]{2,})?`)
 }
 
 // CompileURLRegex compiles the regex for validating url
@@ -29,7 +35,14 @@ func CompileURLRegex(expr string) *regexp.Regexp {
 	return regex
 }
 
-// ValidateURL validates the url, return true if valid
-func ValidateURL(url string) bool {
-	return URLMatchRegex.MatchString(url)
+// ValidateShortURL validates a short url, return true if valid
+// shortURL should be a legal base62 string
+func ValidateShortURL(shortURL string) bool {
+	return shortURLMatchRegex.MatchString(shortURL)
+}
+
+// ValidateLongURL validates a long url, return true if valid
+// longURL should be a legal http/https url
+func ValidateLongURL(longURL string) bool {
+	return longURLMatchRegex.MatchString(longURL)
 }

@@ -7,6 +7,7 @@ import (
 	"context"
 	"log"
 
+	"github.com/Aden-Q/short-url/internal/cache"
 	"github.com/Aden-Q/short-url/internal/db"
 	"github.com/Aden-Q/short-url/internal/redis"
 	"github.com/Aden-Q/short-url/internal/router"
@@ -40,10 +41,16 @@ func main() {
 		panic(err)
 	}
 
+	// create a cache client
+	redisCache := cache.NewCache(cache.Config{
+		Redis: redisClient,
+	})
+
 	r := router.NewRouter(
 		router.Config{
 			DB:    dbClient,
 			Redis: redisClient,
+			Cache: redisCache,
 		},
 	)
 

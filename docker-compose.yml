@@ -34,7 +34,7 @@ services:
       interval: 3s
       timeout: 15s
       retries: 5
-      start_period: 5s
+      start_period: 10s
     volumes:
       - mysql_data:/var/lib/mysql
   
@@ -49,7 +49,7 @@ services:
       interval: 3s
       timeout: 15s
       retries: 5
-      start_period: 5s
+      start_period: 10s
     volumes:
       - ./configs/redis.conf:/usr/local/etc/redis/redis.conf
       - redis_data:/var/data/redis

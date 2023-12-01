@@ -1,6 +1,7 @@
 package router
 
 import (
+	"github.com/Aden-Q/short-url/internal/cache"
 	"github.com/Aden-Q/short-url/internal/db"
 	"github.com/Aden-Q/short-url/internal/handler"
 	"github.com/Aden-Q/short-url/internal/redis"
@@ -10,6 +11,7 @@ import (
 type Config struct {
 	DB    db.Engine
 	Redis redis.Client
+	Cache cache.Cache
 }
 
 type Router struct {
@@ -25,10 +27,11 @@ func DBMiddleware(db db.Engine) gin.HandlerFunc {
 	}
 }
 
-// RedisMiddleware is a middleware to establish redis connection
-func RedisMiddleware(redis redis.Client) gin.HandlerFunc {
+// RedisMiddleware is a middleware to establish redis connection, and make sure cache is instantiated
+func RedisMiddleware(redis redis.Client, cache cache.Cache) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Set("redisConn", redis)
+		c.Set("cache", cache)
 		c.Next()
 	}
 }
@@ -44,7 +47,7 @@ func NewRouter(config Config) *Router {
 	r.Use(DBMiddleware(config.DB))
 
 	// attach a global middleware in the handler chain to enforce redis connection
-	r.Use(RedisMiddleware(config.Redis))
+	r.Use(RedisMiddleware(config.Redis, config.Cache))
 
 	// the health check endpoint
 	r.GET("/health", handler.Health)

@@ -19,7 +19,7 @@ type Engine interface {
 	// Create creates a new record
 	Create(value interface{}) error
 	// Update updates the value of a column in a table
-	Update(table interface{}, column string, value interface{}) *gorm.DB
+	Update(table interface{}, column string, value interface{}) error
 }
 
 type engine struct {
@@ -62,6 +62,6 @@ func (e *engine) Create(value interface{}) error {
 // table will be used to build the condition for the update
 // column is the column to be updated
 // value is the new value
-func (e *engine) Update(table interface{}, column string, value interface{}) *gorm.DB {
-	return e.DB.Model(table).Update(column, value)
+func (e *engine) Update(table interface{}, column string, value interface{}) error {
+	return e.DB.Model(table).Update(column, value).Error
 }
