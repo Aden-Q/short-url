@@ -5,6 +5,7 @@ The current components include:
 
 + A web server for URL shortening and redirection
 + [TODO] Redis cache server
++ [TODO] generate doc with swagger
 + [TODO] logging
 + [TODO] connection pooling
 + [TODO] integration test running on CI
