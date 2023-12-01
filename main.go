@@ -23,7 +23,7 @@ func main() {
 	defer cancel()
 
 	// connect to the mysql database
-	db, err := db.NewEngine(db.Config{
+	dbClient, err := db.NewEngine(db.Config{
 		MySQLDSN: configs.MySQLDSN,
 	})
 	if err != nil {
@@ -32,7 +32,7 @@ func main() {
 	}
 
 	// connect to redis server
-	redis, err := redis.NewClient(serverCtx, redis.Config{
+	redisClient, err := redis.NewClient(serverCtx, redis.Config{
 		Addr: configs.RedisAddr,
 	})
 	if err != nil {
@@ -42,11 +42,12 @@ func main() {
 
 	r := router.NewRouter(
 		router.Config{
-			DB:    db,
-			Redis: redis,
+			DB:    dbClient,
+			Redis: redisClient,
 		},
 	)
 
+	// Run is a blocking method, it only retuns when the server is shut down
 	if err := r.Run(configs.ServerAddr); err != nil {
 		panic(err)
 	}

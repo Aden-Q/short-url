@@ -19,7 +19,7 @@ type bindingQuery struct {
 // ShortenHandler shortens a long URL
 func ShortenHandler(c *gin.Context) {
 	// make sure mysql connection is established is is stored into the context
-	d, ok := c.MustGet("dbConn").(db.Engine)
+	dbClient, ok := c.MustGet("dbConn").(db.Engine)
 	if !ok {
 		c.JSON(500, gin.H{"message": "mysql connection not established"})
 		return
@@ -46,7 +46,7 @@ func ShortenHandler(c *gin.Context) {
 
 		// First check if the input long URL already exists in the database
 		var url model.URL
-		if err := d.First(&url, "long_url = ?", binding.LongURL); err == nil {
+		if err := dbClient.First(&url, "long_url = ?", binding.LongURL); err == nil {
 			// the url already exists, return the short url and do nothing
 			c.JSON(http.StatusOK, gin.H{"shortURL": url.ShortURL})
 		} else if errors.Is(err, db.ErrRecordNotFound) {
@@ -56,14 +56,14 @@ func ShortenHandler(c *gin.Context) {
 			}
 
 			// insert the record into the database
-			if err := d.Create(&url); err != nil {
+			if err := dbClient.Create(&url); err != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 				return
 			} else {
 				// encode the auto-incremented ID into a short URL with base62
 				shortURL := string(base62.FormatUint(url.ID))
 				// update the short URL in the database
-				if err := d.Update(&url, "short_url", shortURL).Error; err != nil {
+				if err := dbClient.Update(&url, "short_url", shortURL).Error; err != nil {
 					c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 					return
 				}
