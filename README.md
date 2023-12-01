@@ -24,9 +24,17 @@ Example usage:
 
 ```bash
 $ curl -iX POST 'http://localhost:8080/api/v1/data/shorten?longURL=www.google.com'
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Date: Fri, 01 Dec 2023 05:10:33 GMT
+Content-Length: 18
+
+{"shortURL":"aA4"}
 ```
 
-### URL redirection 
+### URL redirection
+
+`shortURL`: The request URI path
 
 `GET /api/v1/:shortURL`
 
@@ -35,10 +43,15 @@ $ curl -iX POST 'http://localhost:8080/api/v1/data/shorten?longURL=www.google.co
 
 Example usage:
 
-`shortURL`: The URL you get from the previous step, or any short URL in the database
-
 ```bash
-$ curl -i 'http://localhost:8080/api/v1/shortURL'
+$ curl -i 'http://localhost:8080/api/v1/aA4'
+HTTP/1.1 301 Moved Permanently
+Content-Type: text/html; charset=utf-8
+Location: /api/v1/www.google.com
+Date: Fri, 01 Dec 2023 05:11:54 GMT
+Content-Length: 57
+
+<a href="/api/v1/www.google.com">Moved Permanently</a>.
 ```
 
 ## Command Runner
