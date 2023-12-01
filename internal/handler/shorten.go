@@ -30,6 +30,12 @@ func ShortenHandler(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	} else {
+		// check if the input long URL is valid
+		if !model.ValidateURL(binding.LongURL) {
+			c.JSON(http.StatusBadRequest, gin.H{"message": "Invalid URL"})
+			return
+		}
+
 		// First check if the input long URL already exists in the database
 		var url model.URL
 		if err := db.First(&url, "long_url = ?", binding.LongURL).Error; err == nil {
