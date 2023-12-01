@@ -20,7 +20,7 @@ func RedirectHandler(c *gin.Context) {
 	// make sure mysql connection is established is is stored into the context
 	d, ok := c.MustGet("dbConn").(db.Engine)
 	if !ok {
-		c.JSON(500, gin.H{"message": "dbConn not found"})
+		c.JSON(500, gin.H{"message": "mysql connection not established"})
 		return
 	}
 

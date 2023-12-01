@@ -47,7 +47,7 @@ func NewRouter(config Config) *Router {
 	r.Use(RedisMiddleware(config.Redis))
 
 	// the health check endpoint
-	r.GET("/ping", handler.Health)
+	r.GET("/health", handler.Health)
 
 	apiv1 := r.Group("/api/v1")
 	{
