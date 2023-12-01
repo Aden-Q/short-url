@@ -4,9 +4,10 @@ A fully functional URL shortener using MySQL as the storage server and Redis as 
 The current components include:
 
 + A web server for URL shortening and redirection
++ [TODO] Redis cache server
 + [TODO] logging
 + [TODO] connection pooling
-+ [TODO] Redis cache server
++ [TODO] integration test running on CI
 + [TODO] a rate limiter middleware
 
 ## Usages
