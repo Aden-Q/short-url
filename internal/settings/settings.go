@@ -10,6 +10,8 @@ type Settings struct {
 	MySQLDSN string `envconfig:"MYSQL_DSN" required:"true"`
 	// the address the web server listens on
 	ServerAddr string `envconfig:"SERVER_ADDR" default:":8080"`
+	// the address of the redis server
+	RedisAddr string `envconfig:"REDIS_ADDR" default:":6379"`
 }
 
 // Load loads the env vars from the .env file, serializes them into a Settings struct
