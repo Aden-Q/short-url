@@ -9,6 +9,7 @@ services:
     restart: always
     environment:
       MYSQL_DSN: user:password@tcp(mysql:3306)/db?charset=utf8mb4&parseTime=True&loc=Local
+      REDIS_ADDR: redis:6379
     ports:
       - 8080:8080
     depends_on:
@@ -30,7 +31,7 @@ services:
       - 3306:3306
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-ppassword"]
-      interval: 1s
+      interval: 3s
       timeout: 15s
       retries: 5
       start_period: 5s
@@ -45,7 +46,7 @@ services:
       - 6379:6379
     healthcheck:
       test: ["CMD", "redis-cli" ,"ping"]
-      interval: 1s
+      interval: 3s
       timeout: 15s
       retries: 5
       start_period: 5s
