@@ -8,9 +8,9 @@ import (
 type Settings struct {
 	// mysql's connection string required by the gorm mysql driver
 	MySQLDSN string `envconfig:"MYSQL_DSN" required:"true"`
-	// the address the web server listens on
+	// address the web server listens on
 	ServerAddr string `envconfig:"SERVER_ADDR" default:":8080"`
-	// the address of the redis server
+	// address of the redis server
 	RedisAddr string `envconfig:"REDIS_ADDR" default:":6379"`
 }
 
