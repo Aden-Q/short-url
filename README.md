@@ -30,6 +30,7 @@ $ curl -iX POST 'http://localhost:8080/api/v1/data/shorten?longURL=www.google.co
 
 `GET /api/v1/:shortURL`
 
++ Request parameter: no, using URI path binding instead
 + Return: longURL for HTTP redirection
 
 Example usage:
