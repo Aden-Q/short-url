@@ -6,6 +6,7 @@ package main
 import (
 	"context"
 	"os"
+	"time"
 
 	"github.com/Aden-Q/short-url/internal/cache"
 	"github.com/Aden-Q/short-url/internal/db"
@@ -77,9 +78,10 @@ func main() {
 	})
 
 	r := router.New(router.Config{
-		DB:    dbClient,
-		Redis: redisClient,
-		Cache: redisCache,
+		RequestTimeout: time.Duration(configs.RequestTimeout),
+		DB:             dbClient,
+		Redis:          redisClient,
+		Cache:          redisCache,
 	},
 	)
 

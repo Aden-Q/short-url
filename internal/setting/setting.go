@@ -6,6 +6,8 @@ import (
 )
 
 type Setting struct {
+	// the timeout for the routing pipeline to process a request, measured in seconds
+	RequestTimeout int `envconfig:"REQUEST_TIMEOUT" default:"60"`
 	// mysql's connection string required by the gorm mysql driver
 	MySQLDSN string `envconfig:"MYSQL_DSN" required:"true"`
 	// address the web server listens on
