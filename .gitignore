@@ -25,3 +25,6 @@ short-url
 
 # test coverage output
 coverage.out
+
+# redis dump file
+dump.rdb
