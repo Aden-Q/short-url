@@ -1,4 +1,5 @@
 name: Bump version
+
 on:
   pull_request:
     types:
