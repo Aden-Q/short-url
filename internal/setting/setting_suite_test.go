@@ -1,4 +1,4 @@
-package settings_test
+package setting_test
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestSettings(t *testing.T) {
+func TestSetting(t *testing.T) {
 	RegisterFailHandler(Fail)
 	RunSpecs(t, "Settings Suite")
 }
