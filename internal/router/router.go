@@ -1,6 +1,8 @@
 package router
 
 import (
+	"time"
+
 	_ "github.com/Aden-Q/short-url/docs"
 	"github.com/Aden-Q/short-url/internal/cache"
 	"github.com/Aden-Q/short-url/internal/db"
@@ -13,9 +15,10 @@ import (
 )
 
 type Config struct {
-	DB    db.Engine
-	Redis redis.Client
-	Cache cache.Cache
+	RequestTimeout time.Duration
+	DB             db.Engine
+	Redis          redis.Client
+	Cache          cache.Cache
 }
 
 type Router struct {
@@ -29,6 +32,9 @@ func New(config Config) *Router {
 		Engine: gin.Default(),
 		config: config,
 	}
+
+	// context timeout for the handler chain
+	r.Use(middleware.RequestTimeout(config.RequestTimeout))
 
 	// attach a global middleware in the handler chain to enforce database connection
 	r.Use(middleware.DB(config.DB))
