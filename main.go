@@ -5,7 +5,6 @@ package main
 
 import (
 	"context"
-	"log"
 	"os"
 
 	"github.com/Aden-Q/short-url/internal/cache"
@@ -16,30 +15,46 @@ import (
 	"github.com/Aden-Q/short-url/internal/setting"
 )
 
-func main() {
-	// load global settings
-	configs, err := setting.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
+var (
+	// configs is a global instance of the app/server settings
+	configs *setting.Setting
+	// log is a global logger instance
+	log *logger.Logger
+)
+
+func initSetting() error {
+	var err error
+	configs, err = setting.Load()
+
+	return err
+}
+
+func initLogger() {
+	log = logger.New(os.Stdout)
+}
+
+func init() {
+	initLogger()
+	if err := initSetting(); err != nil {
+		log.Fatal().Err(err).Msg("Failed to load configs")
 	}
+}
 
-	// initialize a logger instance
-	logger := logger.New(os.Stdout)
-
-	logger.Info().Msg("Starting server...")
+func main() {
+	log.Info().Msg("Starting server...")
 
 	serverCtx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	// attch the logger to the context
-	serverCtx = logger.WithContext(serverCtx)
+	serverCtx = log.WithContext(serverCtx)
 
 	// connect to the mysql database server
 	dbClient, err := db.NewEngine(db.Config{
 		MySQLDSN: configs.MySQLDSN,
 	})
 	if err != nil {
-		logger.Fatal().Err(err).Msg("Failed to connect to database")
+		log.Fatal().Err(err).Msg("Failed to connect to database")
 		panic(err)
 	}
 
@@ -48,7 +63,7 @@ func main() {
 		Addr: configs.RedisAddr,
 	})
 	if err != nil {
-		logger.Fatal().Err(err).Msg("Failed to connect to redis")
+		log.Fatal().Err(err).Msg("Failed to connect to redis")
 		panic(err)
 	}
 
@@ -66,9 +81,9 @@ func main() {
 
 	// Run is a blocking method, it only retuns when the server is shut down
 	if err := r.Run(configs.ServerAddr); err != nil {
-		logger.Fatal().Err(err).Msg("Server stopped")
+		log.Fatal().Err(err).Msg("Server stopped")
 		panic(err)
 	}
 
-	logger.Info().Msg("Server stopped")
+	log.Info().Msg("Server stopped")
 }

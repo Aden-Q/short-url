@@ -46,7 +46,7 @@ func RedirectHandler(c *gin.Context) {
 		return
 	} else {
 		// check if the input short URL is valid
-		if !model.ValidateLongURL(binding.ShortURL) {
+		if !model.ValidateShortURL(binding.ShortURL) {
 			c.JSON(http.StatusBadRequest, gin.H{"message": "Invalid URL"})
 			return
 		}
