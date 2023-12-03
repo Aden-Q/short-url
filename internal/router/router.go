@@ -5,6 +5,7 @@ import (
 	"github.com/Aden-Q/short-url/internal/cache"
 	"github.com/Aden-Q/short-url/internal/db"
 	"github.com/Aden-Q/short-url/internal/handler"
+	"github.com/Aden-Q/short-url/internal/middleware"
 	"github.com/Aden-Q/short-url/internal/redis"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -22,23 +23,6 @@ type Router struct {
 	config Config
 }
 
-// DBMiddleware is a middleware to establish mysql database connection
-func DBMiddleware(db db.Engine) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.Set("dbConn", db)
-		c.Next()
-	}
-}
-
-// RedisMiddleware is a middleware to establish redis connection, and make sure cache is instantiated
-func RedisMiddleware(redis redis.Client, cache cache.Cache) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.Set("redisConn", redis)
-		c.Set("cache", cache)
-		c.Next()
-	}
-}
-
 func New(config Config) *Router {
 	// default gin engine with Logger and Recovery middleware
 	r := Router{
@@ -47,10 +31,10 @@ func New(config Config) *Router {
 	}
 
 	// attach a global middleware in the handler chain to enforce database connection
-	r.Use(DBMiddleware(config.DB))
+	r.Use(middleware.DB(config.DB))
 
 	// attach a global middleware in the handler chain to enforce redis connection
-	r.Use(RedisMiddleware(config.Redis, config.Cache))
+	r.Use(middleware.Redis(config.Redis, config.Cache))
 
 	// swagger docs
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
