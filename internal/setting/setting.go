@@ -1,11 +1,11 @@
-package settings
+package setting
 
 import (
 	"github.com/joho/godotenv"
 	"github.com/kelseyhightower/envconfig"
 )
 
-type Settings struct {
+type Setting struct {
 	// mysql's connection string required by the gorm mysql driver
 	MySQLDSN string `envconfig:"MYSQL_DSN" required:"true"`
 	// address the web server listens on
@@ -15,14 +15,14 @@ type Settings struct {
 }
 
 // Load loads the env vars from the .env file, serializes them into a Settings struct
-func Load() (*Settings, error) {
+func Load() (*Setting, error) {
 	// load env vars from the .env file
 	err := godotenv.Load()
 	if err != nil {
 		return nil, err
 	}
 
-	configMap := &Settings{}
+	configMap := &Setting{}
 
 	// serialize the env vars into configMap
 	err = envconfig.Process("", configMap)

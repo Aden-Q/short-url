@@ -36,7 +36,7 @@ func RedisMiddleware(redis redis.Client, cache cache.Cache) gin.HandlerFunc {
 	}
 }
 
-func NewRouter(config Config) *Router {
+func New(config Config) *Router {
 	// default gin engine with Logger and Recovery middleware
 	r := Router{
 		Engine: gin.Default(),

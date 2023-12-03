@@ -31,7 +31,7 @@ type cache struct {
 	*redisCache.Cache
 }
 
-func NewCache(config Config) Cache {
+func New(config Config) Cache {
 	return &cache{
 		ctx: config.Redis.Context(),
 		Cache: redisCache.New(&redisCache.Options{

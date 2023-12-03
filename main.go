@@ -11,11 +11,11 @@ import (
 	"github.com/Aden-Q/short-url/internal/db"
 	"github.com/Aden-Q/short-url/internal/redis"
 	"github.com/Aden-Q/short-url/internal/router"
-	"github.com/Aden-Q/short-url/internal/settings"
+	"github.com/Aden-Q/short-url/internal/setting"
 )
 
 func main() {
-	configs, err := settings.Load()
+	configs, err := setting.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
@@ -42,11 +42,11 @@ func main() {
 	}
 
 	// create a cache client
-	redisCache := cache.NewCache(cache.Config{
+	redisCache := cache.New(cache.Config{
 		Redis: redisClient,
 	})
 
-	r := router.NewRouter(
+	r := router.New(
 		router.Config{
 			DB:    dbClient,
 			Redis: redisClient,
