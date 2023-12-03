@@ -5,30 +5,56 @@ package main
 
 import (
 	"context"
-	"log"
+	"os"
 
 	"github.com/Aden-Q/short-url/internal/cache"
 	"github.com/Aden-Q/short-url/internal/db"
+	"github.com/Aden-Q/short-url/internal/logger"
 	"github.com/Aden-Q/short-url/internal/redis"
 	"github.com/Aden-Q/short-url/internal/router"
 	"github.com/Aden-Q/short-url/internal/setting"
 )
 
-func main() {
-	configs, err := setting.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
+var (
+	// configs is a global instance of the app/server settings
+	configs *setting.Setting
+	// log is a global logger instance
+	log *logger.Logger
+)
+
+func initSetting() error {
+	var err error
+	configs, err = setting.Load()
+
+	return err
+}
+
+func initLogger() {
+	log = logger.New(os.Stdout)
+}
+
+func init() {
+	initLogger()
+	if err := initSetting(); err != nil {
+		log.Fatal().Err(err).Msg("Failed to load configs")
 	}
+}
+
+func main() {
+	log.Info().Msg("Starting server...")
 
 	serverCtx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	// connect to the mysql database
+	// attch the logger to the context
+	serverCtx = log.WithContext(serverCtx)
+
+	// connect to the mysql database server
 	dbClient, err := db.NewEngine(db.Config{
 		MySQLDSN: configs.MySQLDSN,
 	})
 	if err != nil {
-		// TODO: add a log
+		log.Fatal().Err(err).Msg("Failed to connect to database")
 		panic(err)
 	}
 
@@ -37,7 +63,7 @@ func main() {
 		Addr: configs.RedisAddr,
 	})
 	if err != nil {
-		// TODO: add a log
+		log.Fatal().Err(err).Msg("Failed to connect to redis")
 		panic(err)
 	}
 
@@ -46,16 +72,18 @@ func main() {
 		Redis: redisClient,
 	})
 
-	r := router.New(
-		router.Config{
-			DB:    dbClient,
-			Redis: redisClient,
-			Cache: redisCache,
-		},
+	r := router.New(router.Config{
+		DB:    dbClient,
+		Redis: redisClient,
+		Cache: redisCache,
+	},
 	)
 
 	// Run is a blocking method, it only retuns when the server is shut down
 	if err := r.Run(configs.ServerAddr); err != nil {
+		log.Fatal().Err(err).Msg("Server stopped")
 		panic(err)
 	}
+
+	log.Info().Msg("Server stopped")
 }
