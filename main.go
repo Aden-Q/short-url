@@ -40,6 +40,10 @@ func init() {
 	}
 }
 
+// @title short URL
+// @version 2.0
+// @description A fast URL shortener service written in Go.
+// @termsOfService https://github.com/Aden-Q/short-url
 func main() {
 	log.Info().Msg("Starting server...")
 

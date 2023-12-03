@@ -1,11 +1,14 @@
 package router
 
 import (
+	_ "github.com/Aden-Q/short-url/docs"
 	"github.com/Aden-Q/short-url/internal/cache"
 	"github.com/Aden-Q/short-url/internal/db"
 	"github.com/Aden-Q/short-url/internal/handler"
 	"github.com/Aden-Q/short-url/internal/redis"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 type Config struct {
@@ -48,6 +51,9 @@ func New(config Config) *Router {
 
 	// attach a global middleware in the handler chain to enforce redis connection
 	r.Use(RedisMiddleware(config.Redis, config.Cache))
+
+	// swagger docs
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// the health check endpoint
 	r.GET("/health", handler.Health)

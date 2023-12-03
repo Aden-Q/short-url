@@ -29,3 +29,7 @@
 # run lint
 @lint:
   golangci-lint run
+
+# generate RESTful API documentation with Swagger 2.0
+@swag-init:
+  swag init

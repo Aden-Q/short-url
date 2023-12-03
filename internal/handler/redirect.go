@@ -16,7 +16,13 @@ type bindingURI struct {
 	ShortURL string `uri:"shortURL" binding:"required"`
 }
 
-// ShortenHandlerFunc shortens a long URL
+// @Summary RedirectHandler redirects a short URL to a long URL
+// @Produce json
+// @Success 301 {object} model.URL "long URL"
+// @Failure 400 {string} string "Invalid URL"
+// @Failure 404 {string} string "URL not found"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /api/v1/{shortURL} [get]
 func RedirectHandler(c *gin.Context) {
 	// make sure mysql connection is established is is stored into the context
 	d, ok := c.MustGet("dbConn").(db.Engine)
