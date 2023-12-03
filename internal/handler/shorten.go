@@ -17,7 +17,14 @@ type bindingQuery struct {
 	LongURL string `form:"longURL" binding:"required"`
 }
 
-// ShortenHandler shortens a long URL
+// short URL godoc
+// @Summary ShortenHandler shortens a long URL
+// @Produce json
+// @Param longURL query string true "long URL"
+// @Success 200 {object} model.URL "short URL"
+// @Failure 400 {string} string "Invalid URL"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /api/v1/shorten [post]
 func ShortenHandler(c *gin.Context) {
 	// make sure mysql connection is established is is stored into the context
 	dbClient, ok := c.MustGet("dbConn").(db.Engine)

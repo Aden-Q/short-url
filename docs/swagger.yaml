@@ -1,0 +1,66 @@
+definitions:
+  model.URL:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: integer
+      longURL:
+        type: string
+      shortURL:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: A fast URL shortener service written in Go.
+  termsOfService: https://github.com/Aden-Q/short-url
+  title: short URL
+  version: "2.0"
+paths:
+  /api/v1/{shortURL}:
+    get:
+      produces:
+      - application/json
+      responses:
+        "301":
+          description: long URL
+          schema:
+            $ref: '#/definitions/model.URL'
+        "400":
+          description: Invalid URL
+          schema:
+            type: string
+        "404":
+          description: URL not found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: RedirectHandler redirects a short URL to a long URL
+  /api/v1/shorten:
+    post:
+      parameters:
+      - description: long URL
+        in: query
+        name: longURL
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: short URL
+          schema:
+            $ref: '#/definitions/model.URL'
+        "400":
+          description: Invalid URL
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: ShortenHandler shortens a long URL
+swagger: "2.0"
