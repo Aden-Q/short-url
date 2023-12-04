@@ -23,20 +23,21 @@ var (
 	log *logger.Logger
 )
 
-func initSetting() error {
+func setupSetting() error {
 	var err error
 	configs, err = setting.Load()
 
 	return err
 }
 
-func initLogger() {
+func setupLogger() {
 	log = logger.New(os.Stdout)
 }
 
 func init() {
-	initLogger()
-	if err := initSetting(); err != nil {
+	setupLogger()
+
+	if err := setupSetting(); err != nil {
 		log.Fatal().Err(err).Msg("Failed to load configs")
 	}
 }
