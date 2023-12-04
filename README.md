@@ -72,7 +72,7 @@ Content-Length: 57
 
 ## Command Runner
 
-We use the command runner [just](https://github.com/casey/just) as an alternative to makefile. Execute `just help` to access a complete list of available commands.
+We use the command runner [just](https://github.com/casey/just) as an alternative to makefile. Execute `just help` to access a complete list of available commands. If you do not have `just` installed, check the [justfile](./justfile) for all receipts.
 
 ## Build and Run Locally
 
@@ -83,6 +83,12 @@ $ docker-compose up -d
 ```
 
 Then you are ready to go.
+
+To build a binary, run:
+
+```bash
+$ just build
+```
 
 To connect to the mysql server, run:
 
