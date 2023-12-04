@@ -21,7 +21,7 @@ vendor/
 go.work
 
 # ignore the executable
-short-url
+./short-url
 
 # test coverage output
 coverage.out
