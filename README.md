@@ -76,7 +76,7 @@ We use the command runner [just](https://github.com/casey/just) as an alternativ
 
 ## Build and Run Locally
 
-We use `docker-compose`` to set up local development pretty easily. It exposes a web server forwarded to host port 8080, a MySQL server forwarded to host port 3306, and a Redis server forwarded to host port 6379. To launch, simply run:
+We use `docker-compose` to set up local development pretty easily. It exposes a web server forwarded to host port 8080, a MySQL server forwarded to host port 3306, and a Redis server forwarded to host port 6379. To launch, simply run:
 
 ```bash
 $ docker-compose up -d
