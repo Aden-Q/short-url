@@ -7,7 +7,7 @@ WORKDIR /
 COPY . ./
 
 RUN go mod download \
-    && CGO_ENABLED=0 GOOS=linux go build -o /short-url
+    && CGO_ENABLED=0 GOOS=linux go build -o /short-url cmd/short-url/main.go
 
 # deploy the application binary into a lean image
 FROM docker.io/alpine:edge AS build-release-stage
