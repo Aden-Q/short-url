@@ -16,7 +16,7 @@
 
 # build a binary executable for the project
 @build:
-  go build -o short-url
+  go build -o ./short-url cmd/short-url/main.go
 
 # a shortcut to connect to the mysql database
 @mysql:
