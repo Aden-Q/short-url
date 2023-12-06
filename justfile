@@ -14,9 +14,9 @@
 @test:
   ginkgo run -r -cover -coverprofile=coverage.out
 
-# build a binary executable for the project
+# build a binary executable for the project, with race detection
 @build:
-  go build -o ./short-url cmd/short-url/main.go
+  go build -race -o ./short-url cmd/short-url/main.go
 
 # a shortcut to connect to the mysql database
 @mysql:
