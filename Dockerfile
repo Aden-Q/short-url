@@ -18,10 +18,6 @@ COPY --from=build-stage /short-url /short-url
 # the env file holding settings for the application
 COPY --from=build-stage /.env /.env
 
-
-RUN apk update \
-    && apk add --no-cache curl sudo
-
 EXPOSE 8080/tcp
 
 USER root:root
